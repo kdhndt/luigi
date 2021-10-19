@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--xml namespace met prefix "th" verwijst naar deze url
+zo kun je later de prefix op deze manier gebruiken: "th:xxx"-->
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza Luigi</title>
+    <link rel="icon" href="images/luigi.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/luigi.css">
+</head>
+<body>
+<h1>Pizza Luigi</h1>
+<img src="images/luigi.jpg" alt="pizza" class="fullwidth">
+<!--<h2>Goede dag</h2>-->
+<!--Ctrl+muisklik op moment-->
+<h2>Goede <span th:text="${moment}"></span></h2>
+<h2>De zaakvoerder</h2>
+<!--description list, description terms/names, describe your term/name-->
+<!--<dl>
+    <dt>Naam</dt>
+    <dd th:text="${zaakvoerder.naam}"></dd>
+    <dt>Aantal kinderen</dt>
+    <dd th:text="${zaakvoerder.aantalKinderen}"></dd>
+    <dt>Gehuwd</dt>
+    <dd th:text="${zaakvoerder.gehuwd} ? 'Ja' : 'Nee'"></dd>
+</dl>-->
+<dt>Adres</dt>
+<dd th:object="${zaakvoerder.adres}" th:text="|*{straat} *{huisNr} *{postcode} *{gemeente}|"></dd>
+<dl th:object="${zaakvoerder}">
+    <dt>Naam</dt>
+    <!--selection expression-->
+    <dd th:text="*{naam}"></dd>
+    <dt>Aantal kinderen</dt>
+    <dd th:text="*{aantalKinderen}"></dd>
+    <dt>Gehuwd</dt>
+    <dd th:text="*{gehuwd} ? 'Ja' : 'Nee'"></dd>
+</dl>
+
+</body>
+</html>
