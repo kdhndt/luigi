@@ -3,10 +3,12 @@ package be.vdab.luigi.controllers;
 import be.vdab.luigi.domain.Pizza;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -25,5 +27,16 @@ public class PizzaController {
                 .addObject("getallen", List.of(3, 7))
                 .addObject("landen", Map.of("B", "Belgie",
                         "NL", "Nederland"));
+    }
+    //pizzas/{id} verzoeken
+    @GetMapping("{id}")
+    //dit is de id uit de pagina die gerequest wordt (e.g. localhost:8080/pizzas/3), daarvoor dient @PathVariable
+    public ModelAndView pizza(@PathVariable long id) {
+        //we gebruiken de pagina pizza.html
+        var modelAndView = new ModelAndView("pizza");
+        //als we de pizza met de id uit de path variable vinden geven we die door aan de Thymeleaf pagina onder de naam pizza
+        Arrays.stream(pizzas).filter(pizza -> pizza.getId() == id).findFirst().ifPresent(
+                pizza -> modelAndView.addObject(pizza));
+        return modelAndView;
     }
 }
