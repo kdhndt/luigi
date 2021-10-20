@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+    <link rel="icon" th:href="@{/images/luigi.ico}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/luigi.css}">
+</head>
+
+<table th:fragment="pizzaTabel(pizzas)" id="pizzatabel">
+    <thead>
+    <tr>
+        <!--        header cell-->
+        <th>Naam</th>
+        <th>Prijs</th>
+        <th>Pikant</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!--for (pizza : pizzas) { herhaal het onderstaande }-->
+    <tr th:each="pizza : ${pizzas}" th:object="${pizza}">
+        <td th:text="*{naam}"></td>
+        <td th:text="*{prijs}" class="getal"></td>
+        <!--toont de span enkel als pikant true is-->
+        <td><span th:if="*{pikant}">pikant</span></td>
+    </tr>
+    </tbody>
+</table>
+
+<body>
+<div>
+    <nav th:fragment="menu">
+        <ul>
+            <li><a th:href="@{/}">Welkom</a></li>
+            <li><a th:href="@{/pizzas}">Pizzas</a></li>
+        </ul>
+    </nav>
+
+</div>
+</body>
+</html>
