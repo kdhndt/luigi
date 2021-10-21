@@ -10,12 +10,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 //@RestController
 @Controller
 @RequestMapping("/")
 //geef classes niet meer visibility dan nodig, public hoeft hier dus niet
 class IndexController {
+    private final AtomicInteger aantalBezoeken = new AtomicInteger();
+
     @GetMapping
     public ModelAndView index() {
         var morgenOfMiddag = LocalTime.now().getHour() < 12 ? "morgen" : "middag";
@@ -23,8 +26,10 @@ class IndexController {
         //addObject geeft extra data mee onder de naam zaakvoerder
         modelAndView.addObject("zaakvoerder",
                 new Persoon("Luigi", "Peperone", 7, true,
-                        LocalDate.of(1966,1,31),
+                        LocalDate.of(1966, 1, 31),
                         new Adres("Grote Markt", "3", 9700, "Oudenaarde")));
+        //verhoog de teller op een thread-safe manier
+        modelAndView.addObject("aantalBezoeken", aantalBezoeken.incrementAndGet());
         return modelAndView;
     }
 
