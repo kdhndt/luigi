@@ -15,12 +15,13 @@ import java.util.Map;
 @Controller
 @RequestMapping("pizzas")
 public class PizzaController {
-//    private final String[] pizzas = {"Prosciutto", "Margherita", "Calzone"};
+    //    private final String[] pizzas = {"Prosciutto", "Margherita", "Calzone"};
     private final Pizza[] pizzas = {
             new Pizza(1, "Prosciutto", BigDecimal.valueOf(4), true),
             new Pizza(2, "Margherita", BigDecimal.valueOf(5), false),
             new Pizza(3, "Calzone", BigDecimal.valueOf(4), false)
     };
+
     @GetMapping
     public ModelAndView pizzas() {
         return new ModelAndView("pizzas", "pizzas", pizzas)
@@ -28,6 +29,7 @@ public class PizzaController {
                 .addObject("landen", Map.of("B", "Belgie",
                         "NL", "Nederland"));
     }
+
     //pizzas/{id} verzoeken
     @GetMapping("{id}")
     //dit is de id uit de pagina die gerequest wordt (e.g. localhost:8080/pizzas/3), daarvoor dient @PathVariable
@@ -38,5 +40,26 @@ public class PizzaController {
         Arrays.stream(pizzas).filter(pizza -> pizza.getId() == id).findFirst().ifPresent(
                 pizza -> modelAndView.addObject(pizza));
         return modelAndView;
+    }
+
+    private List<BigDecimal> uniekePrijzen() {
+        return Arrays.stream(pizzas).map(Pizza::getPrijs).distinct().sorted().toList();
+    }
+
+    //geen "/" voor het pad!
+    @GetMapping("prijzen")
+    public ModelAndView prijzen() {
+        return new ModelAndView("prijzen", "prijzen", uniekePrijzen());
+    }
+
+    private List<Pizza> pizzasMetPrijs(BigDecimal prijs) {
+        return Arrays.stream(pizzas)
+                .filter(pizza -> pizza.getPrijs().compareTo(prijs) == 0)
+                .toList();
+    }
+    @GetMapping("/prijzen/{prijs}")
+    public ModelAndView pizzasMetEenPrijs(@PathVariable BigDecimal prijs) {
+        return new ModelAndView("prijzen", "pizzas", pizzasMetPrijs(prijs))
+                .addObject("prijzen", uniekePrijzen());
     }
 }
