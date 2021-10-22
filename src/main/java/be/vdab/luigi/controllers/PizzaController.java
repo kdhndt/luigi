@@ -62,4 +62,5 @@ public class PizzaController {
         return new ModelAndView("prijzen", "pizzas", pizzasMetPrijs(prijs))
                 .addObject("prijzen", uniekePrijzen());
     }
+    //pushtest
 }
