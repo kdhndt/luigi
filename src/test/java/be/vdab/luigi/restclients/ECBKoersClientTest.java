@@ -8,18 +8,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.*;
 
-//Spring is now connected to JUnit and creates container for bean
 @ExtendWith(SpringExtension.class)
-//Spring can read file
 @PropertySource("application.properties")
-//Spring creates a bean for testing
-@Import(FixerKoersClient.class)
+@Import(ECBKoersClient.class)
 
-class FixerKoersClientTest {
-    private final FixerKoersClient client;
+class ECBKoersClientTest {
+    private final ECBKoersClient client;
 
-    //constructor injecteert nu automatisch de Spring bean FixerKoersClient, mogelijk gemaakt door de annotations en het spring.properties bestand in de resources directory
-    FixerKoersClientTest(FixerKoersClient client) {
+    ECBKoersClientTest(ECBKoersClient client) {
         this.client = client;
     }
 
@@ -27,5 +23,4 @@ class FixerKoersClientTest {
     void deKoersIsPositief() {
         assertThat(client.getDollarKoers()).isPositive();
     }
-
 }

@@ -3,6 +3,8 @@ package be.vdab.luigi.controllers;
 import be.vdab.luigi.domain.Pizza;
 import be.vdab.luigi.exceptions.KoersClientException;
 import be.vdab.luigi.services.EuroService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +20,6 @@ import java.util.Map;
 @RequestMapping("pizzas")
 public class PizzaController {
 
-    //    private final String[] pizzas = {"Prosciutto", "Margherita", "Calzone"};
     private final Pizza[] pizzas = {
             new Pizza(1, "Prosciutto", BigDecimal.valueOf(4), true),
             new Pizza(2, "Margherita", BigDecimal.valueOf(5), false),
@@ -27,13 +28,14 @@ public class PizzaController {
 
     private final EuroService euroService;
 
-    //member variabele moet gedefinieerd worden, dus maak een controller
-    //Spring geeft bij het uitvoeren v/d website de bean mee die EuroService implementeert (DefaultEuroService)
-    //dit zie je ook door op het icoon links te klikken (pijl staat voor Dependency)
+    //maak een constructor zodat Spring bij het opstarten v/d website de membervariabele kan invullen
+    //in dit geval wordt een object v/d DefaultEuroService class die de EuroService interface implementeert als bean gebruikt, aangezien we daar de @Service annotation gebruiken
+    //klik op icoon links om de Dependency link te zien
     public PizzaController(EuroService euroService) {
         this.euroService = euroService;
     }
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping
     public ModelAndView pizzas() {
@@ -58,6 +60,7 @@ public class PizzaController {
                         modelAndView.addObject("inDollar", euroService.naarDollar(pizza.getPrijs()));
                     } catch (KoersClientException ex) {
                         ///TBD
+                        logger.error("Kan dollar koers niet lezen", ex);
                     }
                 }
         );
