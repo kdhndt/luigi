@@ -8,6 +8,13 @@ public class Pizza {
     private final BigDecimal prijs;
     private final boolean pikant;
 
+    public Pizza(long id, String naam, BigDecimal prijs, boolean pikant) {
+        this.id = id;
+        this.naam = naam;
+        this.prijs = prijs;
+        this.pikant = pikant;
+    }
+
     public long getId() {
         return id;
     }
@@ -22,12 +29,5 @@ public class Pizza {
 
     public boolean isPikant() {
         return pikant;
-    }
-
-    public Pizza(long id, String naam, BigDecimal prijs, boolean pikant) {
-        this.id = id;
-        this.naam = naam;
-        this.prijs = prijs;
-        this.pikant = pikant;
     }
 }
