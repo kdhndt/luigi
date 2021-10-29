@@ -3,6 +3,7 @@ package be.vdab.luigi.controllers;
 import be.vdab.luigi.domain.Pizza;
 import be.vdab.luigi.exceptions.KoersClientException;
 import be.vdab.luigi.services.EuroService;
+import be.vdab.luigi.services.PizzaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -20,29 +21,32 @@ import java.util.Map;
 @RequestMapping("pizzas")
 public class PizzaController {
 
-    private final Pizza[] pizzas = {
+/*    private final Pizza[] pizzas = {
             new Pizza(1, "Prosciutto", BigDecimal.valueOf(4), true),
             new Pizza(2, "Margherita", BigDecimal.valueOf(5), false),
             new Pizza(3, "Calzone", BigDecimal.valueOf(4), false)
-    };
+    };*/
 
     private final EuroService euroService;
+    private final PizzaService pizzaService;
 
     //maak een constructor zodat Spring bij het opstarten v/d website de membervariabele kan invullen
-    //in dit geval wordt een object v/d DefaultEuroService class die de EuroService interface implementeert als bean gebruikt, aangezien we daar de @Service annotation gebruiken
+    //in dit geval wordt een object v/d DefaultEuroService class die de EuroService interface implementeert als bean gebruikt,
+    //aangezien we daar de @Service annotation gebruiken
     //klik op icoon links om de Dependency link te zien
-    public PizzaController(EuroService euroService) {
+    public PizzaController(EuroService euroService, PizzaService pizzaService) {
         this.euroService = euroService;
+        this.pizzaService = pizzaService;
     }
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping
     public ModelAndView pizzas() {
-        return new ModelAndView("pizzas", "pizzas", pizzas)
-                .addObject("getallen", List.of(3, 7))
+        return new ModelAndView("pizzas", "pizzas", pizzaService.findAll())
+                /*.addObject("getallen", List.of(3, 7))
                 .addObject("landen", Map.of("B", "Belgie",
-                        "NL", "Nederland"));
+                        "NL", "Nederland"))*/;
     }
 
     //pizzas/{id} verzoeken
@@ -52,8 +56,11 @@ public class PizzaController {
         //we gebruiken de pagina pizza.html
         var modelAndView = new ModelAndView("pizza");
         //als we de pizza met de id uit de path variable vinden geven we die door aan de Thymeleaf pagina onder de naam pizza
+/*
         Arrays.stream(pizzas).filter(pizza -> pizza.getId() == id).findFirst().ifPresent(
-                pizza -> {
+*/
+        pizzaService.findById(id).ifPresent(
+        pizza -> {
                     //gewijzigde code
                     modelAndView.addObject(pizza);
                     try {
@@ -64,33 +71,34 @@ public class PizzaController {
                     }
                 }
         );
-
         return modelAndView;
     }
 
-    private List<BigDecimal> uniekePrijzen() {
+/*    private List<BigDecimal> uniekePrijzen() {
         return Arrays.stream(pizzas).map(Pizza::getPrijs).distinct().sorted().toList();
-    }
+    }*/
 
     //geen "/" voor het pad!
     @GetMapping("prijzen")
     public ModelAndView prijzen() {
-        return new ModelAndView("prijzen", "prijzen", uniekePrijzen());
+        //service(s) oproepen ipv method
+        return new ModelAndView("prijzen", "prijzen", pizzaService.findUniekePrijzen());
     }
 
-    private List<Pizza> pizzasMetPrijs(BigDecimal prijs) {
+/*    private List<Pizza> pizzasMetPrijs(BigDecimal prijs) {
         return Arrays.stream(pizzas)
                 .filter(pizza -> pizza.getPrijs().compareTo(prijs) == 0)
                 .toList();
-    }
+    }*/
 
     //hier ook niet
     @GetMapping("prijzen/{prijs}")
     //@PathVariable geeft de {prijs} gratis mee als toegankelijke informatie naar je Thymeleaf
     //dit dus naast hetgeen die je telkens in je ModelAndView meegeeft
     public ModelAndView pizzasMetEenPrijs(@PathVariable BigDecimal prijs) {
-        return new ModelAndView("prijzen", "pizzas", pizzasMetPrijs(prijs))
-                .addObject("prijzen", uniekePrijzen());
+        //service(s) oproepen ipv method
+        return new ModelAndView("prijzen", "pizzas", pizzaService.findByPrijs(prijs))
+                .addObject("prijzen", pizzaService.findUniekePrijzen());
     }
 
 
