@@ -101,5 +101,10 @@ public class PizzaController {
                 .addObject("prijzen", pizzaService.findUniekePrijzen());
     }
 
+    @GetMapping("aantalpizzasperprijs")
+    public ModelAndView aantalPizzasPerPrijs() {
+        return new ModelAndView("aantalpizzasperprijs", "aantalPizzasPerPrijs", pizzaService.findAantalPizzasPerPrijs());
+    }
+
 
 }

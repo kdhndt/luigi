@@ -1,6 +1,7 @@
 package be.vdab.luigi.services;
 
 import be.vdab.luigi.domain.Pizza;
+import be.vdab.luigi.dto.AantalPizzasPerPrijs;
 import be.vdab.luigi.repositories.PizzaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,5 +76,10 @@ public class DefaultPizzaService implements PizzaService {
     @Override
     public List<Pizza> findByIds(Set<Long> ids) {
         return pizzaRepository.findByIds(ids);
+    }
+
+    @Override
+    public List<AantalPizzasPerPrijs> findAantalPizzasPerPrijs() {
+        return pizzaRepository.findAantalPizzasPerPrijs();
     }
 }
