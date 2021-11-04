@@ -7,8 +7,8 @@
 <!--dit object verwijst naar de VanTotPrijsForm constructor die we als model hebben meegegeven, deze wordt ingevuld door de client en terug-gegeven bij submit van de form?-->
 <form th:object="${vanTotPrijsForm}"
 method="get" th:action="@{/pizzas/vantotprijs}">
-    <label>Van:<span th:errors="*{van}"></span><input th:field="*{van}" autofocus></label>
-    <label>Tot:<span th:errors="*{tot}"></span><input th:field="*{tot}"></label>
+    <label>Van:<span th:errors="*{van}"></span><input th:field="*{van}" autofocus type="number" required min="0"></label>
+    <label>Tot:<span th:errors="*{tot}"></span><input th:field="*{tot}" type="number" required min="0"></label>
     <button>Zoeken</button>
     <!--na de submit wordt er een query string aangemaakt met de waarden die we hier hebben ingevuld-->
 </form>

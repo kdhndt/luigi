@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments::head(title='Van tot prijs')"></head>
+<body>
+<nav th:replace="fragments::menu"></nav>
+<h1>Toevoegen</h1>
+<!--Pizza constructor wordt meegegeven als model bij het bezoeken v/d form pagina-->
+<form th:object="${pizza}" method="post" th:action="@{/pizzas}">
+    <label>Naam:<span th:errors="*{naam}"></span><input th:field="*{naam}" autofocus required></label>
+    <label>Prijs:<span th:errors="*{prijs}"></span><input th:field="*{prijs}" type="number" required></label>
+    <label>Pikant:<span th:errors="*{pikant}"></span><input th:field="*{pikant}" type="checkbox"></label>
+    <input type="hidden" name="id" value="0">
+    <button>Toevoegen</button>
+</form>
+</body>
+<script th:src="@{/js/preventDoubleSubmit.js}" defer></script>
+</html>

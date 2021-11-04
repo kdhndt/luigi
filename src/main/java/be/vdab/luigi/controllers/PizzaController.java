@@ -12,8 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -131,4 +133,24 @@ public class PizzaController {
                 //we halen de waarden uit ons VanTotPrijsForm object en gebruiken die in de method
                 pizzaService.findByPrijsBetween(form.van(), form.tot()));
     }
+
+    @GetMapping("toevoegen/form")
+    public ModelAndView toevoegenForm() {
+        return new ModelAndView("toevoegen")
+                .addObject(new Pizza(0, "", null, false));
+    }
+
+    //Er komt niets na @PostMapping, d.w.z. dat we hier POST requests verwerken naar de URL bij RequestMappings (pizzas)
+    @PostMapping
+    public String toevoegen(@Valid Pizza pizza, Errors errors, RedirectAttributes redirect) {
+        if (errors.hasErrors()) {
+//            return new ModelAndView("toevoegen");
+            return "toevoegen";
+        }
+//        pizzaService.create(pizza);
+        redirect.addAttribute("idNieuwePizza", pizzaService.create(pizza));
+//        return new ModelAndView("pizzas", "pizzas", pizzaService.findAll());
+        return "redirect:/pizzas";
+    }
+
 }
