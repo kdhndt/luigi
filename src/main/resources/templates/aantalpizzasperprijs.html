@@ -3,7 +3,20 @@
 <head th:replace="fragments::head(title='Aantal pizza\'s per prijs')"></head>
 <body>
 <nav th:replace="fragments::menu"></nav>
-
-
+<h1>Aantal pizza's per prijs</h1>
+<table id="aantalpizzasperprijs">
+<thead>
+<tr>
+    <th>Prijs</th>
+    <th>Aantal pizza's</th>
+</tr>
+</thead>
+<tbody>
+<tr th:each="prijsMetAantalPizzas : ${aantalPizzasPerPrijs}"  th:object="${prijsMetAantalPizzas}">
+    <td th:text="*{prijs()}"></td>
+    <td th:text="*{aantal()}"></td>
+</tr>
+</tbody>
+</table>
 </body>
 </html>

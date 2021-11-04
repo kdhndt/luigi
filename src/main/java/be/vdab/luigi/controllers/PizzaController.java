@@ -2,16 +2,20 @@ package be.vdab.luigi.controllers;
 
 import be.vdab.luigi.domain.Pizza;
 import be.vdab.luigi.exceptions.KoersClientException;
+import be.vdab.luigi.forms.VanTotPrijsForm;
 import be.vdab.luigi.services.EuroService;
 import be.vdab.luigi.services.PizzaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -106,5 +110,25 @@ public class PizzaController {
         return new ModelAndView("aantalpizzasperprijs", "aantalPizzasPerPrijs", pizzaService.findAantalPizzasPerPrijs());
     }
 
+    @GetMapping("vantotprijs/form")
+    public ModelAndView vanTotPrijsForm() {
+        return new ModelAndView("vantotprijs")
+                //modelName wordt automatisch "vanTotPrijsForm", gebaseerd op de naam van je datatype
+                .addObject(new VanTotPrijsForm(null, null));
+    }
 
+    @GetMapping("vantotprijs")
+    //Spring gebruikt de constructor van VanTotPrijsForm en vult de van en tot membervariabelen daarvan in met
+    //de van en tot parameter uit je query string (e.g. .../pizzas/vantotpijrs?van=4&tot=5
+    public ModelAndView vanTotPrijs(@Valid VanTotPrijsForm form, Errors errors) {
+        var modelAndView = new ModelAndView("vantotprijs");
+        //Spring geeft hasErrors als true terug als het form object niet kon gemaakt worden
+        if (errors.hasErrors()) {
+            //zoek geen pizzas maar toon de pagina opnieuw
+            return modelAndView;
+        }
+        return modelAndView.addObject("pizzas",
+                //we halen de waarden uit ons VanTotPrijsForm object en gebruiken die in de method
+                pizzaService.findByPrijsBetween(form.van(), form.tot()));
+    }
 }

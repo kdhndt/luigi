@@ -78,6 +78,7 @@ public class DefaultPizzaService implements PizzaService {
         return pizzaRepository.findByIds(ids);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<AantalPizzasPerPrijs> findAantalPizzasPerPrijs() {
         return pizzaRepository.findAantalPizzasPerPrijs();

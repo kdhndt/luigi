@@ -11,7 +11,6 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import java.math.BigDecimal;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 @JdbcTest
@@ -46,7 +45,7 @@ class JdbcPizzaRepositoryTest extends AbstractTransactionalJUnit4SpringContextTe
     private long idVanTestPizza() {
         //jdbcTemplate komt van de baseclass die we geerfd hebben, dit kan je zien door super.jdbcTemplate te doen
         return jdbcTemplate.queryForObject(
-                "select id from pizzas where naam = 'test'", Long.class
+                "select id from pizzas where naam = 'test1'", Long.class
         );
     }
     private long idVanTest2Pizza() {
@@ -63,7 +62,7 @@ class JdbcPizzaRepositoryTest extends AbstractTransactionalJUnit4SpringContextTe
     @Test
     void findById() {
         assertThat(repository.findById(idVanTestPizza())).
-                hasValueSatisfying(pizza -> assertThat(pizza.getNaam()).isEqualTo("test"));
+                hasValueSatisfying(pizza -> assertThat(pizza.getNaam()).isEqualTo("test1"));
     }
     @Test
     void findByOnbestaandeIdVindtGeenPizza() {
