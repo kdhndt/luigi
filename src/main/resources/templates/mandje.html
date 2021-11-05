@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments::head(title='Identificatie')"></head>
+<body>
+<script th:src="@{/js/preventDoubleSubmit.js}" defer></script>
+<nav th:replace="fragments::menu"></nav>
+<h1>Mandje</h1>
+<th:block th:if="not ${pizzas.isEmpty()}">
+    <table th:replace="fragments::pizzaTabel(pizzas=${pizzas})"></table>
+</th:block>
+<div th:if="${pizzas.isEmpty()}" class="boodschap">Je mandje is leeg.</div>
+</body>
+</html>

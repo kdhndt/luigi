@@ -19,6 +19,11 @@
         <dt th:if="${inDollar}">In dollar</dt>
         <dd th:if="${inDollar}" th:text="${inDollar}"></dd>
     </dl>
+    <!--we hebben toegang tot {id} van het huidige pizza object in deze pagina die een specifieke pizza omschrijft-->
+    <form method="post" th:action="@{/mandje/{id}(id=*{id})}">
+        <button>In mandje</button>
+    </form>
 </th:block>
+
 </body>
 </html>
