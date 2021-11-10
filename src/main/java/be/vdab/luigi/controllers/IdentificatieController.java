@@ -28,7 +28,7 @@ public class IdentificatieController {
     @PostMapping
     public String identificatie(@Valid Identificatie identificatie, Errors errors) {
         if (errors.hasErrors()) {
-            return "identifcatie";
+            return "identificatie";
         }
         this.identificatie.setEmailAdres(identificatie.getEmailAdres());
         return "redirect:/";
